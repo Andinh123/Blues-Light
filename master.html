@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script>
+            function fetchURL(url) {
+                fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                    }
+                    // Parse the response as text (HTML)
+                    return response.text();
+                })
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const fetchedBody = doc.querySelector('body');
+                    const fetchedHead = doc.querySelector('head');
+                    document.getElementById('childHead').innerHTML = fetchedHead.innerHTML;
+                    document.getElementById('childBody').innerHTML = fetchedBody.innerHTML;
+
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+            }
+            document.addEventListener("DOMContentLoaded", function() {
+                fetchURL("index");
+            });
+        </script>
+    </head>
+    <body>
+        <div id="childHead"></div>
+        <div id="childBody"></div>
+    </body>
+</html>
